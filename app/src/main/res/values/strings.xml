@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TheScoreAssignment</string>
+    <string name="teams">Teams</string>
+    <string name="wins">wins: %1$d</string>
+    <string name="losses">losses: %1$d</string>
+    <string name="roster">Roster</string>
+</resources>

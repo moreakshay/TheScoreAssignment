@@ -1,0 +1,16 @@
+ext.versions = [
+        material        : '1.2.1',
+        cardview        : '1.0.0',
+        recyclerview    : '1.1.0',
+        appcompat       : '1.2.0',
+        constraintlayout: '2.0.1',
+        circleimageview : '3.0.2',
+        nav_version     : '2.1.0',
+        retrofit        : '2.7.2',
+        room            : '2.3.0-alpha02',
+        dagger          : '2.27',
+        lifecycle       : '2.3.0-alpha07',
+        glide           : '4.11.0',
+        activity        : '1.1.0',
+        fragment        : '1.2.5'
+]

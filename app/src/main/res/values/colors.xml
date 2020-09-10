@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#424242</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#DBAF37</color>
+
+    <!--Text-->
+    <color name="textTitle">#FFFFFF</color>
+    <color name="textSubTitle">#ADADAD</color>
+    <color name="textReg">#E0E0E0</color>
+
+    <color name="cardBackground">#80000000</color>
+</resources>
+
