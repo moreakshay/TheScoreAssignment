@@ -1,9 +1,6 @@
 package com.moreakshay.thescoreassignment.utils.network
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 
 abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
@@ -32,7 +29,7 @@ abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
     }
 
     //Without new CoruotineScope
-    suspend fun asMutableLiveData() : LiveData<Resource<ResultType>> {
+    suspend fun asMutableLiveData() : MutableLiveData<Resource<ResultType>> {
         return MediatorLiveData<Resource<ResultType>>().let { data ->
             data.addSource(loadFromDb()){ responseHandler.handleLoading(it) }
             try {

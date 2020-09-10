@@ -11,5 +11,5 @@ import com.moreakshay.thescoreassignment.utils.constants.TEAM_ID
 interface PlayerDao: BaseDao<PlayerEntity> {
 
     @Query("SELECT * FROM $PLAYER_TABLENAME WHERE $TEAM_ID = :teamId")
-    suspend fun getAllPlayers(teamId: Int): LiveData<List<PlayerEntity>>
+    fun getAllPlayers(teamId: Int): LiveData<List<PlayerEntity>>
 }

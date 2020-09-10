@@ -41,7 +41,7 @@
         >
 
         <TextView
-            android:id="@+id/tvPos"
+            android:id="@+id/tvWins"
             style="@style/rvItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -7,7 +7,7 @@ import androidx.room.Update
 
 interface BaseDao<T> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(obj: T)
+    abstract fun insert(obj: T) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg obj: T) : Array<Long>

@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvPos"
+            android:id="@+id/tvWins"
             style="@style/rvItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:layout_marginBottom="@dimen/_20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvPos"
+            app:layout_constraintTop_toBottomOf="@+id/tvWins"
             android:drawablePadding="@dimen/_8dp"
             app:drawableStartCompat="@drawable/ic_hashtag" />
     </androidx.constraintlayout.widget.ConstraintLayout>

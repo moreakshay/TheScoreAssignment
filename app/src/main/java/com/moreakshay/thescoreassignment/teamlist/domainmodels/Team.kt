@@ -1,6 +1,4 @@
-package com.moreakshay.thescoreassignment.teamlist
-
-import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
+package com.moreakshay.thescoreassignment.teamlist.domainmodels
 
 data class Team(val id: Int,
 val name: String,

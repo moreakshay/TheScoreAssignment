@@ -11,4 +11,5 @@ import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
 abstract class TheScoreDatabase: RoomDatabase() {
     abstract fun teamDao(): TeamDao
     abstract fun playerDao(): PlayerDao
+//    abstract fun teamWithPlayersDao(): TeamWithPlayersDao
 }

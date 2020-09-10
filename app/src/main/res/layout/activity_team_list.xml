@@ -1,35 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".teamlist.TeamListActivity"
-    android:background="@color/colorPrimary"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/_20dp"
-        android:layout_marginTop="@dimen/_36dp"
-        android:text="@string/teams"
-        style="@style/Title"
-        />
+    <data>
+        <import type="androidx.lifecycle.LiveData"/>
+        <import type="java.util.List"/>
+        <import type="com.moreakshay.thescoreassignment.utils.network.Resource"/>
+        <import type="com.moreakshay.thescoreassignment.utils.network.Status"/>
+        <import type="com.moreakshay.thescoreassignment.teamlist.domainmodels.Team"/>
+        <import type="android.view.View"/>
+        <variable
+            name="teamList"
+            type="LiveData&lt;Resource&lt;List&lt;Team>>>" />
+    </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTeam"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/match_constraint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-        android:layout_marginTop="@dimen/_20dp"
-        />
+        android:layout_height="match_parent"
+        tools:context=".teamlist.TeamListActivity"
+        android:background="@color/colorPrimary">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{teamList.status == Status.LOADING ? View.VISIBLE : View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_36dp"
+            android:text="@string/teams"
+            style="@style/Title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTeam"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/match_constraint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            android:layout_marginTop="@dimen/_20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            listData="@{teamList.data}"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
