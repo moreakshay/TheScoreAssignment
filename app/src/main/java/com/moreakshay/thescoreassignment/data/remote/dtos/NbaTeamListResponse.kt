@@ -13,25 +13,25 @@ import java.lang.IllegalArgumentException
 data class NbaTeamListResponse(
     @field:Json(name = "full_name")
     val fullName: String,
-    @Json(name = "id")
+    @field:Json(name = "id")
     val id: Int,
-    @Json(name = "losses")
+    @field:Json(name = "losses")
     val losses: Int?,
-    @Json(name = "players")
+    @field:Json(name = "players")
     val players: List<Player?>?,
-    @Json(name = "wins")
+    @field:Json(name = "wins")
     val wins: Int?
 ) {
     data class Player(
-        @Json(name = "first_name")
+        @field:Json(name = "first_name")
         val firstName: String?,
-        @Json(name = "id")
+        @field:Json(name = "id")
         val id: Int,
-        @Json(name = "last_name")
+        @field:Json(name = "last_name")
         val lastName: String?,
-        @Json(name = "number")
+        @field:Json(name = "number")
         val number: Int?,
-        @Json(name = "position")
+        @field:Json(name = "position")
         val position: String?
     )
 }

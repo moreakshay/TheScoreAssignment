@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/_6dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="player"
+            type="com.moreakshay.thescoreassignment.teamlist.domainmodels.Team.Player" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
+        app:cardCornerRadius="@dimen/_6dp"
+        android:layout_marginBottom="@dimen/_8dp"
+        android:layout_marginLeft="@dimen/_8dp"
+        android:layout_marginRight="@dimen/_8dp"
+        >
 
-        <TextView
-            android:id="@+id/tvName"
-            style="@style/Name"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_20dp"
-            android:text="Raptors"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@color/colorPrimaryDark">
 
-        <TextView
-            android:id="@+id/tvWins"
-            style="@style/rvItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvName"
-            android:drawablePadding="@dimen/_8dp"
-            app:drawableStartCompat="@drawable/ic_jersey" />
+            <TextView
+                android:id="@+id/tvName"
+                style="@style/Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_20dp"
+                displayName="@{player.firstName}"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvNum"
-            style="@style/rvItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginBottom="@dimen/_20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvWins"
-            android:drawablePadding="@dimen/_8dp"
-            app:drawableStartCompat="@drawable/ic_hashtag" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tvPos"
+                style="@style/rvItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginTop="@dimen/_16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                android:drawablePadding="@dimen/_8dp"
+                app:drawableStartCompat="@drawable/ic_jersey"
+                android:text="@{player.position}"
+                />
+
+            <TextView
+                android:id="@+id/tvNum"
+                style="@style/rvItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tvName"
+                app:layout_constraintTop_toBottomOf="@+id/tvPos"
+                android:drawablePadding="@dimen/_8dp"
+                app:drawableStartCompat="@drawable/ic_hashtag"
+                android:text="@{String.valueOf(player.number)}"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

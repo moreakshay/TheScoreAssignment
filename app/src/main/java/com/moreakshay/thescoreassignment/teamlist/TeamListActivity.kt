@@ -10,6 +10,7 @@ import com.moreakshay.thescoreassignment.R
 import com.moreakshay.thescoreassignment.TheScoreApplication
 import com.moreakshay.thescoreassignment.databinding.ActivityTeamListBinding
 import com.moreakshay.thescoreassignment.teamdetails.TeamDetailsActivity
+import com.moreakshay.thescoreassignment.utils.constants.TEAM_INTENT_KEY
 import javax.inject.Inject
 
 class TeamListActivity : AppCompatActivity() {
@@ -22,7 +23,7 @@ class TeamListActivity : AppCompatActivity() {
     }
     private val adapter: TeamAdapter = TeamAdapter(TeamClickListener { team ->
         var intent = Intent(this, TeamDetailsActivity::class.java)
-//        intent.putExtra
+        intent.putExtra(TEAM_INTENT_KEY, team)
         startActivity(intent)
     })
 
