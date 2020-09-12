@@ -6,6 +6,7 @@ import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.toDomainModel
 import com.moreakshay.thescoreassignment.data.remote.ApiService
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
+import com.moreakshay.thescoreassignment.data.remote.dtos.createPlayerList
 import com.moreakshay.thescoreassignment.data.remote.dtos.toEntity
 import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamEntity
 import com.moreakshay.thescoreassignment.injection.scopes.ApplicationScope
@@ -22,9 +23,10 @@ class TheScoreRepository @Inject constructor(
     fun getAllTeams(): LiveData<Resource<List<Team>>> {
         return object : NetworkBoundResource<List<Team>, List<NbaTeamListResponse>>() {
             override suspend fun saveCallResult(item: List<NbaTeamListResponse>) {
+                //TODO: use Room's .inTransition() method
                 item.forEach { teamListResponse ->
                     local.teamDao().insert(teamListResponse.toTeamEntity())
-                    local.playerDao().insertAll(createPlayerList(teamListResponse))
+                    local.playerDao().insertAll(teamListResponse.createPlayerList())
                 }
             }
 
@@ -37,15 +39,5 @@ class TheScoreRepository @Inject constructor(
             override suspend fun createCall(): List<NbaTeamListResponse> = remote.getNbaTeamList()
 
         }.asLiveData()
-    }
-
-    private fun createPlayerList(team: NbaTeamListResponse): List<PlayerEntity> {
-        val players = mutableListOf<PlayerEntity>()
-        team.players?.forEach { player ->
-            if (player != null) {
-                players.add(player.toEntity(team.id))
-            }
-        }
-        return players
     }
 }

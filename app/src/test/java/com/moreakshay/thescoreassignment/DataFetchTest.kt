@@ -2,6 +2,7 @@ package com.moreakshay.thescoreassignment
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
+import com.google.common.truth.Truth.assertThat
 import com.moreakshay.thescoreassignment.data.TheScoreRepository
 import com.moreakshay.thescoreassignment.data.local.TheScoreDatabase
 import com.moreakshay.thescoreassignment.data.local.daos.PlayerDao
@@ -13,10 +14,10 @@ import com.moreakshay.thescoreassignment.data.remote.ApiService
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.utils.network.Status
 import com.squareup.moshi.Moshi
+import getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when` as whenever
@@ -44,69 +45,6 @@ class DataFetchTest {
     @Test
     fun checkApiRequestSuccessSavesDataCorrectly() = runBlockingTest {
         val mockDatabase = mock(TheScoreDatabase::class.java)
-
-        whenever(mockDatabase.playerDao()).thenReturn(object: PlayerDao {
-            override fun getAllPlayers(teamId: Int): LiveData<List<PlayerEntity>> {
-                TODO("Not yet implemented")
-            }
-
-            override fun insert(obj: PlayerEntity): Long {
-                TODO("Not yet implemented")
-            }
-
-            override fun insertAll(vararg obj: PlayerEntity): Array<Long> {
-                TODO("Not yet implemented")
-            }
-
-            override fun insertAll(list: List<PlayerEntity>): List<Long> {
-                TODO("Not yet implemented")
-            }
-
-            override fun update(obj: PlayerEntity) {
-                TODO("Not yet implemented")
-            }
-
-            override fun delete(obj: PlayerEntity) {
-                TODO("Not yet implemented")
-            }
-        })
-        whenever(mockDatabase.teamDao()).thenReturn(object: TeamDao {
-            override suspend fun getAllTeamsOnce(): List<TeamWithPlayers> {
-                TODO("Not yet implemented")
-            }
-
-            override fun getAllTeamsWithPlayers(): LiveData<List<TeamWithPlayers>> {
-                TODO("Not yet implemented")
-            }
-
-            override fun getAllTeamsWithPlayersSortByWins(): LiveData<List<TeamWithPlayers>> {
-                TODO("Not yet implemented")
-            }
-
-            override fun getAllTeamsWithPlayersSortyByLosses(): LiveData<List<TeamWithPlayers>> {
-                TODO("Not yet implemented")
-            }
-
-            override fun insert(obj: TeamEntity): Long {
-                TODO("Not yet implemented")
-            }
-
-            override fun insertAll(vararg obj: TeamEntity): Array<Long> {
-                TODO("Not yet implemented")
-            }
-
-            override fun insertAll(list: List<TeamEntity>): List<Long> {
-                TODO("Not yet implemented")
-            }
-
-            override fun update(obj: TeamEntity) {
-                TODO("Not yet implemented")
-            }
-
-            override fun delete(obj: TeamEntity) {
-                TODO("Not yet implemented")
-            }
-        })
 
         val repository = TheScoreRepository(
             mockDatabase,
@@ -144,8 +82,9 @@ class DataFetchTest {
         val result2 = teams.getOrAwaitValue()
 
         assertThat(result1.status).isEqualTo(Status.LOADING)
-        assertThat(result1.data).isNullOrEmpty()
-        assertThat(result1.message).isNullOrEmpty()
+        assertThat(result1.data).isNull()
+        assertThat(result1.data).isEmpty()
+        assertThat(result1.message).isNull()
 
         assertThat(result2.status).isEqualTo(Status.SUCCESS)
         assertThat(result2.data).isEqualTo(response)

@@ -8,12 +8,9 @@ import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.constants.NOT_AVAILABLE
 
 
-@BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, teamList: List<Team>?) =
-        teamList?.let { (recyclerView.adapter as TeamAdapter).submitList(it) } // TODO: do something about this
-
 @BindingAdapter("displayName")
 fun displayName(textView: TextView, name: String){
+    //TODO: take first name and last name add no space if either is empty
     if(name.isNotEmpty()) textView.text = name
     else textView.text = NOT_AVAILABLE
 }

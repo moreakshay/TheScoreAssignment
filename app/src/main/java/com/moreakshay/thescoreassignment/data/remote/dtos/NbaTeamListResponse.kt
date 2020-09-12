@@ -39,8 +39,8 @@ data class NbaTeamListResponse(
 fun NbaTeamListResponse.toEntity(): TeamWithPlayers {
     val teamEntity = toTeamEntity()
     val roster = players?.map { it?.toEntity(teamEntity.id) }
-    if (roster != null) {
-        return TeamWithPlayers(team = teamEntity, players = roster.requireNoNulls())
+    if (roster != null && roster.isNotEmpty()) {
+        return TeamWithPlayers(team = teamEntity, players = roster.filterNotNull())
     }
     throw IllegalArgumentException("Players or Player values is null")
 }
@@ -61,4 +61,14 @@ fun NbaTeamListResponse.Player.toEntity(teamId: Int): PlayerEntity {
         number = number ?: 0,
         position = position ?: NOT_AVAILABLE
     )
+}
+
+fun NbaTeamListResponse.createPlayerList(): List<PlayerEntity> {
+    val players = mutableListOf<PlayerEntity>()
+    this.players?.forEach { player ->
+        if (player != null) {
+            players.add(player.toEntity(this.id))
+        }
+    }
+    return players
 }

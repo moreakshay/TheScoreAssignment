@@ -1,0 +1,96 @@
+[
+  {
+    "wins": 45,
+    "losses": 20,
+    "full_name": "Boston Celtics",
+    "id": 1,
+    "players": [
+      {
+        "id": 37729,
+        "first_name": "Kadeem",
+        "last_name": "Allen",
+        "position": "SG",
+        "number": 45
+      },
+      {
+        "id": 30508,
+        "first_name": "Aron",
+        "last_name": "Baynes",
+        "position": "C",
+        "number": 46
+      }
+    ]
+  },
+  {
+    "wins": 20,
+    "losses": 44,
+    "full_name": "Brooklyn Nets",
+    "id": 2,
+    "players": [
+      {
+        "id": 802,
+        "first_name": "Quincy",
+        "last_name": "Acy",
+        "position": "F",
+        "number": 13
+      },
+      {
+        "id": 53393,
+        "first_name": "Jarrett",
+        "last_name": "Allen",
+        "position": "F-C",
+        "number": 31
+      },
+      {
+        "id": 233,
+        "first_name": "DeMarre",
+        "last_name": "Carroll",
+        "position": "F",
+        "number": 9
+      }
+    ]
+  },
+  {
+    "wins": 24,
+    "losses": 40,
+    "full_name": "New York Knicks",
+    "id": 3,
+    "players": [
+      {
+        "id": 12606,
+        "first_name": "Ron",
+        "last_name": "Baker",
+        "position": "G",
+        "number": 31
+      },
+      {
+        "id": 248,
+        "first_name": "Michael",
+        "last_name": "Beasley",
+        "position": "F",
+        "number": 8
+      },
+      {
+        "id": 11734,
+        "first_name": "Trey",
+        "last_name": "Burke",
+        "position": "PG",
+        "number": 23
+      },
+      {
+        "id": 24746,
+        "first_name": "Damyean",
+        "last_name": "Dotson",
+        "position": "SG",
+        "number": 21
+      },
+      {
+        "id": 6179,
+        "first_name": "Tim",
+        "last_name": "Hardaway Jr.",
+        "position": "G-F",
+        "number": 3
+      }
+    ]
+  }
+]
