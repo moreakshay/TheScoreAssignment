@@ -1,4 +1,4 @@
-package com.moreakshay.thescoreassignment.teamlist
+package com.moreakshay.thescoreassignment.ui.teamlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.moreakshay.thescoreassignment.R
 import com.moreakshay.thescoreassignment.databinding.ItemTeamBinding
-import com.moreakshay.thescoreassignment.teamlist.domainmodels.Team
+import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 
 class TeamAdapter(private val clickListener: TeamClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -28,9 +28,7 @@ class TeamAdapter(private val clickListener: TeamClickListener) :
         (holder as TeamViewHolder).bind(differ.currentList[position], clickListener)
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Team>() {
         override fun areItemsTheSame(oldItem: Team, newItem: Team): Boolean {

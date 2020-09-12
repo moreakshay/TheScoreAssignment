@@ -4,4 +4,5 @@
     <string name="wins">wins: %1$d</string>
     <string name="losses">losses: %1$d</string>
     <string name="roster">Roster</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

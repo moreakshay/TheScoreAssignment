@@ -1,20 +1,29 @@
-package com.moreakshay.thescoreassignment.teamdetails
+package com.moreakshay.thescoreassignment.ui.teamdetails
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.moreakshay.thescoreassignment.R
 import com.moreakshay.thescoreassignment.databinding.ActivityTeamDetailsBinding
-import com.moreakshay.thescoreassignment.teamlist.domainmodels.Team
-import com.moreakshay.thescoreassignment.utils.constants.TEAM_INTENT_KEY
+import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 
 class TeamDetailsActivity : AppCompatActivity() {
+    companion object {
+        private const val TEAM_INTENT_KEY = "TEAM_INTENT_KEY"
+
+        fun intentFor(context: Context, team: Team): Intent {
+            val intent = Intent(context, TeamDetailsActivity::class.java)
+            intent.putExtra(TEAM_INTENT_KEY, team)
+            return intent
+        }
+    }
 
     val team: Team by lazy {
         intent.getParcelableExtra(TEAM_INTENT_KEY)!!
     }
+
     val binding: ActivityTeamDetailsBinding by lazy {
         DataBindingUtil.setContentView(
             this,
@@ -34,7 +43,9 @@ class TeamDetailsActivity : AppCompatActivity() {
         binding.team = team
         adapter.submitList(team.players)
         binding.rvRoster.adapter = adapter
-    }
 
-    public fun onIvBackClicked(view: View) = onBackPressed()
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
 }

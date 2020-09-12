@@ -1,6 +1,5 @@
-package com.moreakshay.thescoreassignment.teamlist
+package com.moreakshay.thescoreassignment.ui.teamlist
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -9,22 +8,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.moreakshay.thescoreassignment.R
 import com.moreakshay.thescoreassignment.TheScoreApplication
 import com.moreakshay.thescoreassignment.databinding.ActivityTeamListBinding
-import com.moreakshay.thescoreassignment.teamdetails.TeamDetailsActivity
-import com.moreakshay.thescoreassignment.utils.constants.TEAM_INTENT_KEY
+import com.moreakshay.thescoreassignment.ui.teamdetails.TeamDetailsActivity
+import com.moreakshay.thescoreassignment.utils.network.Status
 import javax.inject.Inject
 
 class TeamListActivity : AppCompatActivity() {
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel: TeamListViewModel by viewModels {viewModelFactory}
+
+    private val viewModel: TeamListViewModel by viewModels { viewModelFactory }
+
     private val binding: ActivityTeamListBinding by lazy {
         DataBindingUtil.setContentView<ActivityTeamListBinding>(this, R.layout.activity_team_list)
     }
+
     private val adapter: TeamAdapter = TeamAdapter(TeamClickListener { team ->
-        var intent = Intent(this, TeamDetailsActivity::class.java)
-        intent.putExtra(TEAM_INTENT_KEY, team)
-        startActivity(intent)
+        startActivity(TeamDetailsActivity.intentFor(this, team))
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +33,12 @@ class TeamListActivity : AppCompatActivity() {
         bind()
     }
 
-    private fun bind(){
-        binding.teamList = viewModel.teamList
+    private fun bind() {
+        viewModel.teamList.observe(this){
+            adapter.submitList(it.data ?: emptyList())
+            binding.status = it.status
+        }
         binding.rvTeam.adapter = adapter
+//        binding.status = viewModel.teamList.value?.status ?: Status.ERROR
     }
 }

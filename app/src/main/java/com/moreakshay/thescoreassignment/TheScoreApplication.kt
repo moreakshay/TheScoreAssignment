@@ -15,9 +15,7 @@ class TheScoreApplication: Application() {
     }
 
     private fun buildAppComponent(){
-        component = DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
+        component = DaggerAppComponent.factory().create(this)
         component.inject(this)
     }
 }

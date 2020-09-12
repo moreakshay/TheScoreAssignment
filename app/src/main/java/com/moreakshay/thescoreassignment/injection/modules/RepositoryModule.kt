@@ -45,17 +45,17 @@ class RepositoryModule {
     @ApplicationScope
     @Provides
     fun proviedHeaderInterceptor(): Interceptor {
-        return Interceptor {
-            val url = it.request()
+        return Interceptor { chain ->
+            val url = chain.request()
                     .url()
                     .newBuilder()
 //                    .addQueryParameter(API_KEY, BuildConfig.API_KEY)
                     .build()
-            val request = it.request()
+            val request = chain.request()
                     .newBuilder()
                     .url(url)
                     .build()
-            return@Interceptor it.proceed(request)
+            return@Interceptor chain.proceed(request)
         }
     }
 

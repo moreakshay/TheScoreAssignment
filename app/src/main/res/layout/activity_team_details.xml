@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.moreakshay.thescoreassignment.teamlist.domainmodels.Team"/>
+        <import type="com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team"/>
         <variable
             name="team"
             type="Team" />
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        tools:context=".teamdetails.TeamDetailsActivity">
+        tools:context=".ui.teamdetails.TeamDetailsActivity">
 
         <ImageView
             android:id="@+id/ivBack"
@@ -26,7 +26,6 @@
             android:layout_marginTop="@dimen/_16dp"
             android:padding="@dimen/_16dp"
             android:src="@drawable/ic_back"
-            android:onClick="onIvBackClicked"
             />
 
         <TextView

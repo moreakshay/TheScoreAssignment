@@ -4,55 +4,29 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 
 abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
-
     private val responseHandler = ResponseHandler()
 
-    fun asLiveData() : LiveData<Resource<ResultType>> {
-        return liveData(Dispatchers.IO) {
-            val disposable = emitSource(loadFromDb().map { responseHandler.handleLoading(it) })
+    fun asLiveData(): LiveData<Resource<ResultType>> =
+        liveData(Dispatchers.IO) {
+            val initialData = loadFromDb()
+            emitSource(initialData.map { responseHandler.handleLoading(it)})
+
             try {
-                val apiResponse = createCall()
-                apiResponse.let {
-                    disposable.dispose()
+                if (shouldFetch(initialData.value)) {
+                    val apiResponse = createCall()
                     saveCallResult(apiResponse)
-                    emitSource(
-                            loadFromDb().map {
-                                responseHandler.handleSuccess(it)
-                            }
-                    )
                 }
+                emitSource(loadFromDb().map { responseHandler.handleSuccess(it) })
             } catch (e: Exception) {
-                e.printStackTrace()
                 emitSource(loadFromDb().map { responseHandler.handleException(e, it) })
             }
         }
-    }
-
-    //Without new CoruotineScope
-    suspend fun asMutableLiveData() : MutableLiveData<Resource<ResultType>> {
-        return MediatorLiveData<Resource<ResultType>>().let { data ->
-            data.addSource(loadFromDb()){ responseHandler.handleLoading(it) }
-            try {
-                val apiResponse = createCall()
-                apiResponse.let {
-                    saveCallResult(apiResponse)
-                    data.addSource(
-                            loadFromDb()) {
-                                responseHandler.handleSuccess(it)
-                            }
-                }
-            } catch (e: Exception) {
-                data.addSource(loadFromDb()) {responseHandler.handleException(e, it)}
-            }
-            data
-        }
-    }
 
     protected abstract suspend fun saveCallResult(item: RequestType)
 
     protected abstract fun shouldFetch(data: ResultType?): Boolean
 
-    protected abstract suspend fun loadFromDb(): LiveData<ResultType>
+    protected abstract fun loadFromDb(): LiveData<ResultType>
 
     protected abstract suspend fun createCall(): RequestType
 }

@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".TheScoreApplication">
-        <activity android:name=".teamdetails.TeamDetailsActivity"
+        <activity android:name="com.moreakshay.thescoreassignment.ui.teamdetails.TeamDetailsActivity"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".teamlist.TeamListActivity"
+        <activity android:name="com.moreakshay.thescoreassignment.ui.teamlist.TeamListActivity"
             android:screenOrientation="portrait"
             >
             <intent-filter>

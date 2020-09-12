@@ -10,6 +10,6 @@ import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
 @Database(entities = [TeamEntity::class, PlayerEntity::class], version = 1)
 abstract class TheScoreDatabase: RoomDatabase() {
     abstract fun teamDao(): TeamDao
+
     abstract fun playerDao(): PlayerDao
-//    abstract fun teamWithPlayersDao(): TeamWithPlayersDao
 }

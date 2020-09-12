@@ -8,23 +8,23 @@
         <import type="java.util.List"/>
         <import type="com.moreakshay.thescoreassignment.utils.network.Resource"/>
         <import type="com.moreakshay.thescoreassignment.utils.network.Status"/>
-        <import type="com.moreakshay.thescoreassignment.teamlist.domainmodels.Team"/>
+        <import type="com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team"/>
         <import type="android.view.View"/>
         <variable
-            name="teamList"
-            type="LiveData&lt;Resource&lt;List&lt;Team>>>" />
+            name="status"
+            type="Status" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".teamlist.TeamListActivity"
+        tools:context=".ui.teamlist.TeamListActivity"
         android:background="@color/colorPrimary">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{teamList.status == Status.LOADING ? View.VISIBLE : View.GONE}"
+            android:visibility="@{status == Status.LOADING ? View.VISIBLE : View.GONE}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +53,6 @@
             android:layout_marginTop="@dimen/_20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
-            listData="@{teamList.data}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,12 @@
 package com.moreakshay.thescoreassignment.data.local.entities
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.moreakshay.thescoreassignment.teamlist.domainmodels.Team
+import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.constants.ID
 import com.moreakshay.thescoreassignment.utils.constants.TEAM_ID
+import kotlinx.coroutines.Dispatchers
 
 data class TeamWithPlayers(
     @Embedded val team: TeamEntity,
@@ -16,8 +16,10 @@ data class TeamWithPlayers(
     ) val players: List<PlayerEntity>
 )
 
-fun LiveData<List<TeamWithPlayers>>.toDomainModel(): LiveData<List<Team>> {
-    return Transformations.map(this){ it.map { it.toDomainModel() }}
+fun LiveData<List<TeamWithPlayers>>.toDomainModel(): LiveData<List<Team>> = switchMap { list ->
+    liveData(Dispatchers.IO) {
+        emit(list.map { it.toDomainModel() })
+    }
 }
 
 fun TeamWithPlayers.toDomainModel(): Team {

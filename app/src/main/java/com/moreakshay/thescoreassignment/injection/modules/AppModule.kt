@@ -8,12 +8,11 @@ import com.moreakshay.thescoreassignment.injection.qualifiers.ApplicationContext
 import com.moreakshay.thescoreassignment.injection.scopes.ApplicationScope
 
 @Module
-class AppModule(var app: TheScoreApplication) {
-
+class AppModule {
     @ApplicationContext
     @ApplicationScope
     @Provides
-    fun getContext(): Context{
+    fun getContext(app: TheScoreApplication): Context {
         return app
     }
 }

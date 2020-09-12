@@ -10,7 +10,8 @@ import com.moreakshay.thescoreassignment.injection.modules.RepositoryModule
 import com.moreakshay.thescoreassignment.injection.modules.ViewModelModule
 import com.moreakshay.thescoreassignment.injection.qualifiers.ApplicationContext
 import com.moreakshay.thescoreassignment.injection.scopes.ApplicationScope
-import com.moreakshay.thescoreassignment.teamlist.TeamListActivity
+import com.moreakshay.thescoreassignment.ui.teamlist.TeamListActivity
+import dagger.BindsInstance
 
 @ApplicationScope
 @Component(modules = [AppModule::class, RepositoryModule::class, ViewModelModule::class])
@@ -23,4 +24,8 @@ interface AppComponent {
     fun inject(app: TheScoreApplication)
     fun inject(activity: TeamListActivity)
 
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance app: TheScoreApplication): AppComponent
+    }
 }

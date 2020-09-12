@@ -1,4 +1,4 @@
-package com.moreakshay.thescoreassignment.teamdetails
+package com.moreakshay.thescoreassignment.ui.teamdetails
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.moreakshay.thescoreassignment.R
 import com.moreakshay.thescoreassignment.databinding.ItemRosterBinding
-import com.moreakshay.thescoreassignment.teamlist.domainmodels.Team
+import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 
 class PlayerAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -27,9 +27,7 @@ class PlayerAdapter() :
         (holder as PlayerViewHolder).bind(differ.currentList[position])
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Team.Player>() {
         override fun areItemsTheSame(oldItem: Team.Player, newItem: Team.Player): Boolean {
@@ -40,6 +38,7 @@ class PlayerAdapter() :
             return oldItem.id == newItem.id
         }
     }
+
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
     fun submitList(list: List<Team.Player>) {
@@ -48,8 +47,10 @@ class PlayerAdapter() :
 
 }
 
-class PlayerViewHolder(private val binding: ItemRosterBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class PlayerViewHolder(
+    private val binding: ItemRosterBinding
+) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(player: Team.Player) {
         binding.player = player
         binding.executePendingBindings()
