@@ -16,8 +16,8 @@ open class ResponseHandler {
         e.printStackTrace()
         return when (e) {
             is HttpException -> Resource.error(getErrorMessage(e.code()), data)
-            is SocketTimeoutException -> Resource.error(getErrorMessage(ErrorCodes.SocketTimeOut.code), null)
-            else -> Resource.error(getErrorMessage(Int.MAX_VALUE), null)
+            is SocketTimeoutException -> Resource.error(getErrorMessage(ErrorCodes.SocketTimeOut.code), data)
+            else -> Resource.error(getErrorMessage(Int.MAX_VALUE), data)
         }
     }
 

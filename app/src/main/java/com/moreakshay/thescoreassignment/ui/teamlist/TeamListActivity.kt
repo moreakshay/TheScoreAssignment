@@ -2,6 +2,7 @@ package com.moreakshay.thescoreassignment.ui.teamlist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -34,11 +35,10 @@ class TeamListActivity : AppCompatActivity() {
     }
 
     private fun bind() {
-        viewModel.teamList.observe(this){
-            adapter.submitList(it.data ?: emptyList())
-            binding.status = it.status
+        viewModel.teamList.observe(this) { resource ->
+            adapter.submitList(resource.data ?: emptyList())
+            binding.status = resource.status
         }
         binding.rvTeam.adapter = adapter
-//        binding.status = viewModel.teamList.value?.status ?: Status.ERROR
     }
 }

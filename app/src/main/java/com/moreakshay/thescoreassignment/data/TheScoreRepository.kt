@@ -2,12 +2,10 @@ package com.moreakshay.thescoreassignment.data
 
 import androidx.lifecycle.LiveData
 import com.moreakshay.thescoreassignment.data.local.TheScoreDatabase
-import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.toDomainModel
 import com.moreakshay.thescoreassignment.data.remote.ApiService
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.data.remote.dtos.createPlayerList
-import com.moreakshay.thescoreassignment.data.remote.dtos.toEntity
 import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamEntity
 import com.moreakshay.thescoreassignment.injection.scopes.ApplicationScope
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team

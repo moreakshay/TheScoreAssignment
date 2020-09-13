@@ -3,6 +3,7 @@ package com.moreakshay.thescoreassignment.data.local.entities
 import androidx.lifecycle.*
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.moreakshay.thescoreassignment.core.dispatchers.DispatcherProvider
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.constants.ID
 import com.moreakshay.thescoreassignment.utils.constants.TEAM_ID
@@ -17,7 +18,7 @@ data class TeamWithPlayers(
 )
 
 fun LiveData<List<TeamWithPlayers>>.toDomainModel(): LiveData<List<Team>> = switchMap { list ->
-    liveData(Dispatchers.IO) {
+    liveData(DispatcherProvider.IO) {
         emit(list.map { it.toDomainModel() })
     }
 }

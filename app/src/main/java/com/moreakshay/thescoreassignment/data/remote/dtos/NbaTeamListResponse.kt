@@ -36,7 +36,7 @@ data class NbaTeamListResponse(
     )
 }
 
-fun NbaTeamListResponse.toEntity(): TeamWithPlayers {
+fun NbaTeamListResponse.toTeamWithPlayers(): TeamWithPlayers {
     val teamEntity = toTeamEntity()
     val roster = players?.map { it?.toEntity(teamEntity.id) }
     if (roster != null && roster.isNotEmpty()) {

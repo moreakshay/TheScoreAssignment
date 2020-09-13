@@ -2,18 +2,16 @@ package com.moreakshay.thescoreassignment.data.remote
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.utils.MockResponseFileReader
+import com.moreakshay.thescoreassignment.utils.TestUtils
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.hamcrest.CoreMatchers.`is`
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.lang.AssertionError
 
 @Suppress("SameParameterValue")
 @RunWith(JUnit4::class)
@@ -47,6 +45,7 @@ class ApiServiceTest {
     @Test
     fun getNbaTeamList_completeApiResponse_returnTrue() {
         enqueueResponse("SmallTeamResponse.json")
+        // Once https://github.com/Kotlin/kotlinx.coroutines/issues/1204 is fixed this can be runBlockingTest
         val teams = runBlocking {
             service.getNbaTeamList()
         }
@@ -79,26 +78,5 @@ class ApiServiceTest {
 
     //TODO: failure state
 
-    private val firstTeam get() = NbaTeamListResponse(
-        wins = 45,
-        losses = 20,
-        fullName = "Boston Celtics",
-        id = 1,
-        players = listOf(
-            NbaTeamListResponse.Player(
-                id = 37729,
-                firstName = "Kadeem",
-                lastName = "Allen",
-                position = "SG",
-                number = 45,
-            ),
-            NbaTeamListResponse.Player(
-                id = 30508,
-                firstName = "Aron",
-                lastName = "Baynes",
-                position = "C",
-                number = 46,
-            )
-        )
-    )
+    private val firstTeam get() = TestUtils.getApiResponse()[0]
 }

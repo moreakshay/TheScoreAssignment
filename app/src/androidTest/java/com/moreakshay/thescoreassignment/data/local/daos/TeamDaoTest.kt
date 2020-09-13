@@ -6,7 +6,7 @@ import com.moreakshay.thescoreassignment.data.local.DbTest
 import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.data.remote.dtos.createPlayerList
-import com.moreakshay.thescoreassignment.data.remote.dtos.toEntity
+import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamWithPlayers
 import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamEntity
 import com.moreakshay.thescoreassignment.utils.MockResponseFileReader
 import com.moreakshay.thescoreassignment.utils.TestUtils
@@ -56,7 +56,7 @@ class TeamDaoTest : DbTest() {
             db.playerDao().insertAll(teamListResponse.createPlayerList())
         }
 
-        val list = loadedData.map { it.toEntity() }
+        val list = loadedData.map { it.toTeamWithPlayers() }
             .sortedBy { it.team.name }
 
         //WHEN values sorted alphabetically

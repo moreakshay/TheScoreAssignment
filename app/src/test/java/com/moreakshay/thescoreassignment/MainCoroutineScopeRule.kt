@@ -16,6 +16,7 @@
  */
 package com.moreakshay.thescoreassignment
 
+import com.moreakshay.thescoreassignment.core.dispatchers.DispatcherProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -74,11 +75,21 @@ class MainCoroutineScopeRule(val dispatcher: TestCoroutineDispatcher = TestCorou
         // All injected dispatchers in a test should point to a single instance of
         // TestCoroutineDispatcher.
         Dispatchers.setMain(dispatcher)
+
+        DispatcherProvider.IO = dispatcher
+        DispatcherProvider.Main = dispatcher
+        DispatcherProvider.Default = dispatcher
+        DispatcherProvider.Unconfined = dispatcher
     }
 
     override fun finished(description: Description?) {
         super.finished(description)
         cleanupTestCoroutines()
         Dispatchers.resetMain()
+
+        DispatcherProvider.IO = Dispatchers.IO
+        DispatcherProvider.Main = Dispatchers.Main
+        DispatcherProvider.Default = Dispatchers.Default
+        DispatcherProvider.Unconfined = Dispatchers.Unconfined
     }
 }

@@ -50,6 +50,7 @@ class TeamViewHolder(private val binding: ItemTeamBinding) : RecyclerView.ViewHo
     fun bind(team: Team, clickListener: TeamClickListener) {
         binding.team = team
         binding.clickListener = clickListener
+        binding.executePendingBindings()
     }
 }
 

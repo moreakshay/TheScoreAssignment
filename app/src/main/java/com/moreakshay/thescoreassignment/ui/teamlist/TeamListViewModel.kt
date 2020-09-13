@@ -1,6 +1,7 @@
 package com.moreakshay.thescoreassignment.ui.teamlist
 
 import androidx.lifecycle.*
+import com.moreakshay.thescoreassignment.core.dispatchers.DispatcherProvider
 import com.moreakshay.thescoreassignment.data.TheScoreRepository
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.network.Resource
@@ -13,19 +14,19 @@ class TeamListViewModel @Inject constructor(
     private val refreshLiveData = MutableLiveData(Any())
 
     enum class SortOrder {
-        NONE,
-        ASCENDING
+        NAME,
+        WINS
     }
 
-    private val sortOrder = MutableLiveData(SortOrder.NONE) //  should come from SavedStateHandle
+    private val sortOrder = MutableLiveData(SortOrder.NAME) //  should come from SavedStateHandle
 
     val teamList: LiveData<Resource<List<Team>>> = refreshLiveData.switchMap { _ ->
         sortOrder.switchMap { sortOrder ->
-            liveData(context = Dispatchers.IO + viewModelScope.coroutineContext) {
+            liveData(context = DispatcherProvider.IO + viewModelScope.coroutineContext) {
                 emitSource(
                     when (sortOrder) {
-                        SortOrder.NONE -> repository.getAllTeams()
-                        SortOrder.ASCENDING -> repository.getAllTeams() // filtered/sorted
+                        SortOrder.NAME -> repository.getAllTeams()
+                        SortOrder.WINS -> repository.getAllTeams() // filtered/sorted
                     }
                 )
             }

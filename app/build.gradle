@@ -97,6 +97,9 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$versions.dagger"
     kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
 
+    //Database Browser
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
     // Dependencies for local unit tests
     testImplementation "junit:junit:$versions.junit"
     testImplementation "org.mockito:mockito-core:$versions.mockito"

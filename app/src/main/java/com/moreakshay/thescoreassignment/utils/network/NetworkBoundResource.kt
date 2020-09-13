@@ -1,16 +1,17 @@
 package com.moreakshay.thescoreassignment.utils.network
 
 import androidx.lifecycle.*
+import com.moreakshay.thescoreassignment.core.dispatchers.DispatcherProvider
 import kotlinx.coroutines.Dispatchers
 
 abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
     private val responseHandler = ResponseHandler()
 
     fun asLiveData(): LiveData<Resource<ResultType>> =
-        liveData(Dispatchers.IO) {
+        liveData(DispatcherProvider.IO) {
             val initialData = loadFromDb()
 
-            val disposableHandle = emitSource(initialData.map { responseHandler.handleLoading(it)})
+            val disposableHandle = emitSource(initialData.map { responseHandler.handleLoading(it) })
 
             try {
                 if (shouldFetch(initialData.value)) {
@@ -18,6 +19,7 @@ abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
                     saveCallResult(apiResponse)
                 }
                 disposableHandle.dispose()
+
                 emitSource(loadFromDb().map { responseHandler.handleSuccess(it) })
             } catch (e: Exception) {
                 disposableHandle.dispose()

@@ -1,65 +1,67 @@
 package com.moreakshay.thescoreassignment.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.liveData
+import com.google.common.truth.Truth.assertThat
 import com.moreakshay.thescoreassignment.MainCoroutineScopeRule
 import com.moreakshay.thescoreassignment.data.local.TheScoreDatabase
 import com.moreakshay.thescoreassignment.data.local.daos.PlayerDao
 import com.moreakshay.thescoreassignment.data.local.daos.TeamDao
+import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
-import com.moreakshay.thescoreassignment.data.local.entities.toDomainModel
 import com.moreakshay.thescoreassignment.data.remote.ApiService
-import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
-import com.moreakshay.thescoreassignment.data.remote.dtos.toEntity
-import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamEntity
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.TestUtils
-import com.moreakshay.thescoreassignment.utils.argumentCaptor
-import com.moreakshay.thescoreassignment.utils.mock
 import com.moreakshay.thescoreassignment.utils.network.Resource
 import getOrAwaitValue
 import io.mockk.*
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
-import org.apache.maven.model.Contributor
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
-import org.mockito.Mockito.*
-import org.mockito.Mockito.`when` as whenever
+import java.util.concurrent.TimeoutException
 
 @RunWith(JUnit4::class)
 class TheScoreRepositoryTest {
 
     private lateinit var repository: TheScoreRepository
-    private val teamDao = Mockito.mock(TeamDao::class.java)
-    private val playerDao = Mockito.mock(PlayerDao::class.java)
-    private val service = mockk<ApiService>()
+
+    @RelaxedMockK
+    private val teamDao = mockk<TeamDao>(relaxed = true)
+
+    @RelaxedMockK
+    private val playerDao = mockk<PlayerDao>(relaxed = true)
+
+    @RelaxedMockK
+    private val service = mockk<ApiService>(relaxed = true)
+
+    @RelaxedMockK
+    private val db = mockk<TheScoreDatabase>(relaxed = true)
 
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Rule
     @JvmField
-    val mainCoroutineScopeRule = MainCoroutineScopeRule()
+    val coroutineScopeRule = MainCoroutineScopeRule()
 
 
     @Before
     fun init() {
-        val db = Mockito.mock(TheScoreDatabase::class.java)
-        whenever(db.teamDao()).thenReturn(teamDao)
-        whenever(db.playerDao()).thenReturn(playerDao)
-        whenever(db.runInTransaction(ArgumentMatchers.any())).thenCallRealMethod()
+        every { db.teamDao() } returns teamDao
+        every { db.playerDao() } returns playerDao
+        every { db.runInTransaction(allAny()) } answers { callOriginal() }
         repository = TheScoreRepository(db, service)
 
         MockKAnnotations.init(this, relaxUnitFun = true)
@@ -67,61 +69,79 @@ class TheScoreRepositoryTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadTeamWithPlayers() = runBlockingTest {
-        pauseDispatcher {
-            val dbData = MutableLiveData<List<TeamWithPlayers>>()
-            whenever(teamDao.getAllTeamsWithPlayers()).thenReturn(dbData)
+    fun testTeamsFromNetworkAreSavedToDatabaseIfDatabaseIsEmpty() = coroutineScopeRule.runBlockingTest {
+        pauseDispatcher()
 
-            val data = repository.getAllTeams()
-            verifyZeroInteractions(teamDao)
-
-            coVerify(inverse = true) { service.getNbaTeamList() }
-
-            val call = listOf(
-                NbaTeamListResponse(
-                    wins = 45,
-                    losses = 20,
-                    fullName = "Boston Celtics",
-                    id = 1,
-                    players = listOf(
-                        NbaTeamListResponse.Player(
-                            id = 37729,
-                            firstName = "Kadeem",
-                            lastName = "Allen",
-                            position = "SG",
-                            number = 45,
-                        ),
-                        NbaTeamListResponse.Player(
-                            id = 30508,
-                            firstName = "Aron",
-                            lastName = "Baynes",
-                            position = "C",
-                            number = 46,
-                        )
-                    )
-                )
-            )
-
-            coEvery { service.getNbaTeamList() } returns call
-
-            val observer = mock<Observer<Resource<List<Team>>>>()
-            data.observeForever(observer)
-
-            runCurrent()
-
-            val updatedDbData = MutableLiveData<List<TeamWithPlayers>>()
-            whenever(teamDao.getAllTeamsWithPlayers()).thenReturn(updatedDbData)
-            dbData.value = emptyList()
-
-            // coVerify { service.getNbaTeamList() }
-            val inserted = argumentCaptor<List<TeamEntity>>()
-            // empty list is a workaround for null capture return
-            verify(teamDao).insertAll(inserted.capture() ?: emptyList())
-
-            MatcherAssert.assertThat(inserted.value.size, CoreMatchers.`is`(1))
-
-            updatedDbData.value = call.map { it.toEntity() }
-            verify(observer).onChanged(Resource.success(call.map { it.toEntity().toDomainModel() }))
+        // giv
+        val dbData = liveData<List<TeamWithPlayers>> {
+            delay(1000)
+            emit(emptyList())
         }
+
+        every { teamDao.getAllTeamsWithPlayers() } returns dbData
+
+        val apiResponse = TestUtils.getApiResponse()
+        coEvery { service.getNbaTeamList() } coAnswers {
+            delay(3000L)
+            apiResponse
+        }
+
+        // when
+        val domainData = repository.getAllTeams()
+
+        val observer = Observer<Resource<List<Team>>> {}
+        domainData.observeForever(observer)
+
+        // then
+        advanceTimeBy(500L)
+
+        try {
+            domainData.getOrAwaitValue()
+            Assert.fail("Should have no value")
+        } catch (e: TimeoutException) {
+            // OK
+        }
+
+        advanceTimeBy(1000L)
+
+        val firstResource = domainData.getOrAwaitValue()
+        assertThat(firstResource).isEqualTo(Resource.loading(emptyList<Team>()))
+
+        advanceUntilIdle()
+
+        resumeDispatcher()
+
+        val lastResource = domainData.getOrAwaitValue()
+
+        assertThat(lastResource).isEqualTo(Resource.success(emptyList<Team>())) // it's empty list because the mock is not stateful
+
+        verify { teamDao.getAllTeamsWithPlayers() }
+
+        coVerify { service.getNbaTeamList() }
+
+        verify { db.runInTransaction(allAny()) }
+
+        val teamSlot = slot<TeamEntity>()
+        val playerSlot = slot<List<PlayerEntity>>()
+
+        verify { teamDao.insert(capture(teamSlot)) }
+        verify { playerDao.insertAll(capture(playerSlot)) }
+
+        val apiTeam = apiResponse.sortedBy { it.fullName }[0]
+        val teamEntity = teamSlot.captured
+
+        assertThat(apiTeam.id).isEqualTo(teamEntity.id)
+        assertThat(apiTeam.fullName).isEqualTo(teamEntity.name)
+
+        assertThat(apiTeam.losses).isEqualTo(teamEntity.losses)
+        assertThat(apiTeam.wins).isEqualTo(teamEntity.wins)
+
+        val apiFirstPlayer = checkNotNull(apiTeam.players?.get(0))
+        val playerEntity = playerSlot.captured[0]
+
+        assertThat(apiFirstPlayer.id).isEqualTo(playerEntity.id)
+        assertThat(apiFirstPlayer.lastName).isEqualTo(playerEntity.lastName)
+        assertThat(apiFirstPlayer.firstName).isEqualTo(playerEntity.firstName)
+        assertThat(apiFirstPlayer.number).isEqualTo(playerEntity.number)
     }
 }
