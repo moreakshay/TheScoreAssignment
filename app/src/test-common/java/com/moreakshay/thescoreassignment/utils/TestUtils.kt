@@ -4,6 +4,12 @@ import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito
+
+inline fun <reified T> mock(): T = Mockito.mock(T::class.java)
+
+inline fun <reified T> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
 
 object TestUtils {
 

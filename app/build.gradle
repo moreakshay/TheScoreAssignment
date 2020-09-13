@@ -52,9 +52,10 @@ android {
     }
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"
+        androidTest.resources.srcDirs += "src/test-common/resources"
         test.java.srcDirs += "src/test-common/java"
+        test.resources.srcDirs += "src/test-common/resources"
     }
-
 }
 
 dependencies {
@@ -115,6 +116,10 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:$versions.mockito"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$versions.dexMaker"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+    //noinspection GradleDependency
+    androidTestImplementation "org.assertj:assertj-core:2.9.1"
+    testImplementation "io.mockk:mockk:1.10.0"
+
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:$versions.androidXTestCore"

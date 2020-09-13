@@ -11,16 +11,14 @@ import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamEntity
 import com.moreakshay.thescoreassignment.utils.MockResponseFileReader
 import com.moreakshay.thescoreassignment.utils.TestUtils
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import getOrAwaitValue
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.`is` as isEqualTo
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.collection.IsIterableContainingInOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.assertj.core.api.Assertions.assertThat
+
 
 @RunWith(AndroidJUnit4::class)
 class TeamDaoTest : DbTest() {
@@ -33,34 +31,38 @@ class TeamDaoTest : DbTest() {
         val teamEntity = TestUtils.createTeam(1, "Boston Celtics", 45, 20)
         db.teamDao().insert(teamEntity)
         val loaded = db.teamDao().getTeamById(1).getOrAwaitValue()
-        assertThat(loaded, notNullValue())
-        assertThat(loaded.id, isEqualTo(1))
-        assertThat(loaded.name, isEqualTo("Boston Celtics"))
-        assertThat(loaded.wins, isEqualTo(45))
-        assertThat(loaded.losses, isEqualTo(20))
+        assertThat(loaded).isNotNull()
+        assertThat(loaded.id).isEqualTo(1)
+        assertThat(loaded.name).isEqualTo("Boston Celtics")
+        assertThat(loaded.wins).isEqualTo(45)
+        assertThat(loaded.losses).isEqualTo(20)
     }
 
     @Test
-    fun getAllTeamsWithPlayers_sortyAlphabetically_returnTrue(){
+    fun getAllTeamsWithPlayers_sortyAlphabetically_returnTrue() {
         //GIVEN insert values
-        var list: List<NbaTeamListResponse> =
-        runBlocking {
-            Moshi.Builder().build().adapter<List<NbaTeamListResponse>>(NbaTeamListResponse::class.java).fromJson(
-                MockResponseFileReader("SmallTeamResponse.json").content
-            ) ?: emptyList()
-        }
-        list.forEach { teamListResponse ->
+        val loadedData: List<NbaTeamListResponse> =
+            runBlocking {
+                val type =
+                    Types.newParameterizedType(List::class.java, NbaTeamListResponse::class.java)
+
+                Moshi.Builder().build()
+                    .adapter<List<NbaTeamListResponse>>(type).fromJson(
+                        MockResponseFileReader("TeamResponse.json").content
+                    ) ?: emptyList()
+            }
+        loadedData.forEach { teamListResponse ->
             db.teamDao().insert(teamListResponse.toTeamEntity())
             db.playerDao().insertAll(teamListResponse.createPlayerList())
         }
-        list.sortedBy { it.fullName }
-        list.map { it.toEntity() }
+
+        val list = loadedData.map { it.toEntity() }
+            .sortedBy { it.team.name }
 
         //WHEN values sorted alphabetically
         val teams: List<TeamWithPlayers> = db.teamDao().getAllTeamsWithPlayers().getOrAwaitValue()
 
         //THEN
-        assertThat(teams, IsIterableContainingInOrder.contains(*(list.toTypedArray())))
+        assertThat(teams.map { it.team.name }).containsExactlyElementsOf(list.map { it.team.name })
     }
-
 }

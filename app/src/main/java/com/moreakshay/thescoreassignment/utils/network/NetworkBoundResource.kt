@@ -9,15 +9,18 @@ abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
     fun asLiveData(): LiveData<Resource<ResultType>> =
         liveData(Dispatchers.IO) {
             val initialData = loadFromDb()
-            emitSource(initialData.map { responseHandler.handleLoading(it)})
+
+            val disposableHandle = emitSource(initialData.map { responseHandler.handleLoading(it)})
 
             try {
                 if (shouldFetch(initialData.value)) {
                     val apiResponse = createCall()
                     saveCallResult(apiResponse)
                 }
+                disposableHandle.dispose()
                 emitSource(loadFromDb().map { responseHandler.handleSuccess(it) })
             } catch (e: Exception) {
+                disposableHandle.dispose()
                 emitSource(loadFromDb().map { responseHandler.handleException(e, it) })
             }
         }

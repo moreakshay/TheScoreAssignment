@@ -47,7 +47,7 @@ fun NbaTeamListResponse.toEntity(): TeamWithPlayers {
 
 fun NbaTeamListResponse.toTeamEntity(): TeamEntity {
     return TeamEntity(id = id,
-        name = fullName ?: NOT_AVAILABLE,
+        name = fullName,
         wins = wins ?: NO_INT_AVAILABLE,
         losses = losses ?: NO_INT_AVAILABLE)
 }

@@ -23,10 +23,11 @@ class TheScoreRepository @Inject constructor(
     fun getAllTeams(): LiveData<Resource<List<Team>>> {
         return object : NetworkBoundResource<List<Team>, List<NbaTeamListResponse>>() {
             override suspend fun saveCallResult(item: List<NbaTeamListResponse>) {
-                //TODO: use Room's .inTransition() method
-                item.forEach { teamListResponse ->
-                    local.teamDao().insert(teamListResponse.toTeamEntity())
-                    local.playerDao().insertAll(teamListResponse.createPlayerList())
+                local.runInTransaction {
+                    item.forEach { teamListResponse ->
+                        local.teamDao().insert(teamListResponse.toTeamEntity())
+                        local.playerDao().insertAll(teamListResponse.createPlayerList())
+                    }
                 }
             }
 
