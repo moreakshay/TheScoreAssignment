@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="@dimen/_20dp"
                 android:layout_marginTop="@dimen/_20dp"
-                style="@style/Name" />
+                style="@style/nameText" />
 
             <TextView
                 android:id="@+id/tvPos"

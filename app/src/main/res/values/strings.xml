@@ -5,4 +5,8 @@
     <string name="losses">losses: %1$d</string>
     <string name="roster">Roster</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="refresh">refresh</string>
+    <string name="sort_alphabetically">A</string>
+    <string name="sort_wins">W</string>
+    <string name="sort_losses">L</string>
 </resources>

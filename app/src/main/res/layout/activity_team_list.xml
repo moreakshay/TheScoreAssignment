@@ -4,11 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="androidx.lifecycle.LiveData"/>
-        <import type="java.util.List"/>
-        <import type="com.moreakshay.thescoreassignment.utils.network.Resource"/>
         <import type="com.moreakshay.thescoreassignment.utils.network.Status"/>
-        <import type="com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team"/>
         <import type="android.view.View"/>
         <variable
             name="status"
@@ -21,26 +17,58 @@
         tools:context=".ui.teamlist.TeamListActivity"
         android:background="@color/colorPrimary">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{status == Status.LOADING ? View.VISIBLE : View.GONE}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            />
-
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginTop="@dimen/_36dp"
+            android:layout_marginStart="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
             android:text="@string/teams"
             style="@style/Title" />
+
+        <Button
+            android:id="@+id/bSortAlpha"
+            android:layout_width="@dimen/_24dp"
+            android:layout_height="@dimen/_24dp"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            app:layout_constraintRight_toLeftOf="@id/bSortWins"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@android:color/transparent"
+            android:text="@string/sort_alphabetically"
+            style="@style/sortButton"
+            />
+
+        <Button
+            android:id="@+id/bSortWins"
+            android:layout_width="@dimen/_24dp"
+            android:layout_height="@dimen/_24dp"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            app:layout_constraintRight_toLeftOf="@id/bSortLosses"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@android:color/transparent"
+            android:text="@string/sort_wins"
+            style="@style/sortButton"
+            />
+
+        <Button
+            android:id="@+id/bSortLosses"
+            android:layout_width="@dimen/_24dp"
+            android:layout_height="@dimen/_24dp"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@android:color/transparent"
+            android:text="@string/sort_losses"
+            style="@style/sortButton"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTeam"
@@ -53,6 +81,23 @@
             android:layout_marginTop="@dimen/_20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
+            style="@style/sortButton"
+            />
+
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{status == Status.LOADING ? View.VISIBLE : View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+        <include
+            layout="@layout/snackbar_error"
+            app:isVisible="@{status == Status.ERROR}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

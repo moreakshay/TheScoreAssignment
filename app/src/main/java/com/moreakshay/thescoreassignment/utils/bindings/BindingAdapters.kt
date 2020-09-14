@@ -6,11 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.moreakshay.thescoreassignment.ui.teamlist.TeamAdapter
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.constants.NOT_AVAILABLE
+import java.util.stream.Stream
 
 
-@BindingAdapter("displayName")
-fun displayName(textView: TextView, name: String){
-    //TODO: take first name and last name add no space if either is empty
-    if(name.isNotEmpty()) textView.text = name
-    else textView.text = NOT_AVAILABLE
+@BindingAdapter("firstName", "lastName")
+fun displayName(textView: TextView, firstName: String, lastName: String) {
+    var name = firstName
+    name = when {
+        firstName.isNotEmpty() -> "$name $lastName"
+        firstName.isEmpty() -> lastName
+        else -> NOT_AVAILABLE
+    }
+    textView.text = name
 }

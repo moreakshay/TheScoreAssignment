@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team"/>
+
+        <import type="com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team" />
+
         <variable
             name="team"
             type="Team" />
@@ -19,14 +21,15 @@
 
         <ImageView
             android:id="@+id/ivBack"
-            android:layout_width="@dimen/_48dp"
-            android:layout_height="@dimen/_48dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="@dimen/_24dp"
+            android:layout_height="@dimen/_24dp"
+            android:layout_marginStart="@dimen/_16dp"
             android:layout_marginTop="@dimen/_16dp"
-            android:padding="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            android:padding="@dimen/_4dp"
             android:src="@drawable/ic_back"
-            />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvName"
@@ -34,86 +37,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_24dp"
-            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_14dp"
             android:text="@{team.name}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivBack" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/ivBack"
+            />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvWins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tvWins"
+            style="@style/rvItem"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/_75dp"
             android:layout_marginTop="@dimen/_20dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:cardCornerRadius="@dimen/_6dp"
-            app:layout_constraintLeft_toLeftOf="@id/tvName"
+            android:background="@drawable/card_background"
+            android:gravity="center"
+            android:text="@{String.format(@string/wins, team.wins)}"
+            app:layout_constraintLeft_toLeftOf="@id/ivBack"
             app:layout_constraintTop_toBottomOf="@+id/tvName"
-            >
+            app:layout_constraintRight_toLeftOf="@+id/tvLosses"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            />
 
-            <TextView
-                android:id="@+id/tvWins"
-                style="@style/rvItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:text="@{String.format(@string/wins, team.wins)}"
-                android:paddingStart="@dimen/_20dp"
-                android:paddingLeft="@dimen/_10dp"
-                android:paddingTop="@dimen/_16dp"
-                android:paddingEnd="@dimen/_20dp"
-                android:paddingBottom="@dimen/_16dp"
-                />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tvLosses"
+            style="@style/rvItem"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/_75dp"
             android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_100dp"
             android:layout_marginTop="@dimen/_20dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            android:paddingStart="@dimen/_20dp"
-            android:paddingTop="@dimen/_16dp"
-            android:paddingEnd="@dimen/_20dp"
-            android:paddingBottom="@dimen/_16dp"
-            app:cardCornerRadius="@dimen/_6dp"
-            app:layout_constraintLeft_toRightOf="@id/cvWins"
-            app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-            <TextView
-                android:id="@+id/tvLosses"
-                style="@style/rvItem"
-                android:background="@android:color/transparent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/_20dp"
-                android:paddingTop="@dimen/_16dp"
-                android:paddingEnd="@dimen/_20dp"
-                android:paddingBottom="@dimen/_16dp"
-                android:text="@{String.format(@string/losses, team.losses)}"
-                />
-        </androidx.cardview.widget.CardView>
+            android:background="@drawable/card_background"
+            android:gravity="center"
+            android:text="@{String.format(@string/losses, team.losses)}"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tvWins"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
         <TextView
             android:id="@+id/tvRoster"
+            style="@style/smallTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cvWins"
-            app:layout_constraintLeft_toLeftOf="@id/tvName"
-            android:layout_marginTop="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:layout_marginLeft="@dimen/_8dp"
             android:text="@string/roster"
-            style="@style/smallTitle" />
+            app:layout_constraintLeft_toLeftOf="@id/ivBack"
+            app:layout_constraintTop_toBottomOf="@id/tvWins" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRoster"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/match_constraint"
+            android:layout_marginTop="@dimen/_10dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvRoster"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="@dimen/_10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/tvRoster" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

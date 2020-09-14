@@ -9,7 +9,7 @@
     </style>
     
     <style name="Title" parent="FontBold">
-        <item name="android:textSize">@dimen/font_26sp</item>
+        <item name="android:textSize">@dimen/font_20sp</item>
         <item name="android:textColor">@color/textTitle</item>
     </style>
 
@@ -18,7 +18,7 @@
         <item name="android:textColor">@color/textSubTitle</item>
     </style>
 
-    <style name="Name" parent="FontBold">
+    <style name="nameText" parent="FontBold">
         <item name="android:textSize">@dimen/font_20sp</item>
         <item name="android:textColor">@color/textReg</item>
     </style>
@@ -31,6 +31,19 @@
     <style name="smallTitle" parent="FontLight">
         <item name="android:textSize">@dimen/font_16sp</item>
         <item name="android:textColor">@color/textSubTitle</item>
+    </style>
+
+    <style name="errorText" parent="FontRegular">
+        <item name="android:textSize">@dimen/font_16sp</item>
+        <item name="android:textColor">@color/textReg</item>
+    </style>
+
+    <style name="retryButton" parent="FontBold">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="sortButton" parent="FontBold">
+        <item name="android:textColor">@color/textReg</item>
     </style>
 
     <!--Fonts-->

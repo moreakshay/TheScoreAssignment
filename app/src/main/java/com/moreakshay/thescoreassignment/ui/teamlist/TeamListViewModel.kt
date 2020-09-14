@@ -13,11 +13,6 @@ class TeamListViewModel @Inject constructor(
 ) : ViewModel() {
     private val refreshLiveData = MutableLiveData(Any())
 
-    enum class SortOrder {
-        NAME,
-        WINS
-    }
-
     private val sortOrder = MutableLiveData(SortOrder.NAME) //  should come from SavedStateHandle
 
     val teamList: LiveData<Resource<List<Team>>> = refreshLiveData.switchMap { _ ->
@@ -25,8 +20,10 @@ class TeamListViewModel @Inject constructor(
             liveData(context = DispatcherProvider.IO + viewModelScope.coroutineContext) {
                 emitSource(
                     when (sortOrder) {
-                        SortOrder.NAME -> repository.getAllTeams()
-                        SortOrder.WINS -> repository.getAllTeams() // filtered/sorted
+                        SortOrder.NAME -> repository.getAllTeams(SortOrder.NAME)
+                        SortOrder.WINS -> repository.getAllTeams(SortOrder.WINS)
+                        SortOrder.LOSSES -> repository.getAllTeams(SortOrder.LOSSES)
+                        else ->  repository.getAllTeams()
                     }
                 )
             }
