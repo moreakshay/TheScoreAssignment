@@ -17,51 +17,27 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 @Module
 class RepositoryModule {
+    @ApplicationScope
+    @Provides
+    fun provideApiService(retrofit: Retrofit): ApiService =
+        retrofit.create(ApiService::class.java)
 
     @ApplicationScope
     @Provides
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+    fun provideRetrofit(client: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
 
     @ApplicationScope
     @Provides
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
-    }
+    fun proviesHttpClient(): OkHttpClient =
+        OkHttpClient.Builder().build()
 
     @ApplicationScope
     @Provides
-    fun proviesHttpClient(interceptor: Interceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build()
-    }
-
-    @ApplicationScope
-    @Provides
-    fun proviedHeaderInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val url = chain.request()
-                    .url()
-                    .newBuilder()
-//                    .addQueryParameter(API_KEY, BuildConfig.API_KEY)
-                    .build()
-            val request = chain.request()
-                    .newBuilder()
-                    .url(url)
-                    .build()
-            return@Interceptor chain.proceed(request)
-        }
-    }
-
-    @ApplicationScope
-    @Provides
-    fun provideDatabase(@ApplicationContext context: Context): TheScoreDatabase {
-        return Room.databaseBuilder(context, TheScoreDatabase::class.java, DATABASE_NAME).build()
-    }
+    fun provideDatabase(@ApplicationContext context: Context): TheScoreDatabase =
+        Room.databaseBuilder(context, TheScoreDatabase::class.java, DATABASE_NAME).build()
 }

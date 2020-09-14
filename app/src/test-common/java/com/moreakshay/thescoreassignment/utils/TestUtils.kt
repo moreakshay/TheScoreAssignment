@@ -2,8 +2,9 @@ package com.moreakshay.thescoreassignment.utils
 
 import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
+import com.moreakshay.thescoreassignment.data.local.entities.toTeam
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
-import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
+import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamWithPlayers
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
 
@@ -69,4 +70,8 @@ object TestUtils {
             )
         )
     )
+
+    fun getTeamWithPlayerList() = getApiResponse().map { it.toTeamWithPlayers() }
+
+    fun getTeamList() = getTeamWithPlayerList().map { it.toTeam() }
 }

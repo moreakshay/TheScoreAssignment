@@ -3,7 +3,7 @@ package com.moreakshay.thescoreassignment.data.local.daos
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.moreakshay.thescoreassignment.data.local.DbTest
-import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
+import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayersRelation
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.data.remote.dtos.createPlayerList
 import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamWithPlayers
@@ -60,7 +60,7 @@ class TeamDaoTest : DbTest() {
             .sortedBy { it.team.name }
 
         //WHEN values sorted alphabetically
-        val teams: List<TeamWithPlayers> = db.teamDao().getAllTeamsWithPlayers().getOrAwaitValue()
+        val teams: List<TeamWithPlayersRelation> = db.teamDao().getAllTeamsWithPlayers().getOrAwaitValue()
 
         //THEN
         assertThat(teams.map { it.team.name }).containsExactlyElementsOf(list.map { it.team.name })
@@ -88,7 +88,7 @@ class TeamDaoTest : DbTest() {
             .sortedByDescending { it.team.wins }
 
         //WHEN values sorted alphabetically
-        val teams: List<TeamWithPlayers> = db.teamDao().getAllTeamsWithPlayersSortByWins().getOrAwaitValue()
+        val teams: List<TeamWithPlayersRelation> = db.teamDao().getAllTeamsWithPlayersSortByWins().getOrAwaitValue()
 
         //THEN
         assertThat(teams.map { it.team.id }).containsExactlyElementsOf(list.map { it.team.id })
@@ -116,7 +116,7 @@ class TeamDaoTest : DbTest() {
             .sortedByDescending { it.team.losses }
 
         //WHEN values sorted alphabetically
-        val teams: List<TeamWithPlayers> = db.teamDao().getAllTeamsWithPlayersSortedByLosses().getOrAwaitValue()
+        val teams: List<TeamWithPlayersRelation> = db.teamDao().getAllTeamsWithPlayersSortedByLosses().getOrAwaitValue()
 
         //THEN
         assertThat(teams.map { it.team.id }).containsExactlyElementsOf(list.map { it.team.id })

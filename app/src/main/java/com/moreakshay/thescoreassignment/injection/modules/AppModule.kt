@@ -6,13 +6,12 @@ import dagger.Module
 import dagger.Provides
 import com.moreakshay.thescoreassignment.injection.qualifiers.ApplicationContext
 import com.moreakshay.thescoreassignment.injection.scopes.ApplicationScope
+import dagger.Binds
 
 @Module
-class AppModule {
+abstract class AppModule {
     @ApplicationContext
     @ApplicationScope
-    @Provides
-    fun getContext(app: TheScoreApplication): Context {
-        return app
-    }
+    @Binds
+    abstract fun bindAppContext(app: TheScoreApplication): Context
 }

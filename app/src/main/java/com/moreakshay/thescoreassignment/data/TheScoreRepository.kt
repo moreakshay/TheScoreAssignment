@@ -2,7 +2,7 @@ package com.moreakshay.thescoreassignment.data
 
 import androidx.lifecycle.LiveData
 import com.moreakshay.thescoreassignment.data.local.TheScoreDatabase
-import com.moreakshay.thescoreassignment.data.local.entities.toDomainModel
+import com.moreakshay.thescoreassignment.data.local.entities.toPlayer
 import com.moreakshay.thescoreassignment.data.remote.ApiService
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.data.remote.dtos.createPlayerList
@@ -12,8 +12,10 @@ import com.moreakshay.thescoreassignment.ui.teamlist.SortOrder
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.network.NetworkBoundResource
 import com.moreakshay.thescoreassignment.utils.network.Resource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @ApplicationScope
 class TheScoreRepository @Inject constructor(
     private val local: TheScoreDatabase,
@@ -35,10 +37,10 @@ class TheScoreRepository @Inject constructor(
 
             override fun loadFromDb(): LiveData<List<Team>> {
                 return when (sortOrder) {
-                    SortOrder.NAME -> local.teamDao().getAllTeamsWithPlayers().toDomainModel()
-                    SortOrder.WINS -> local.teamDao().getAllTeamsWithPlayersSortByWins().toDomainModel()
-                    SortOrder.LOSSES -> local.teamDao().getAllTeamsWithPlayersSortedByLosses().toDomainModel()
-                    else -> local.teamDao().getAllTeamsWithPlayers().toDomainModel()
+                    SortOrder.NAME -> local.teamDao().getAllTeamsWithPlayers().toPlayer()
+                    SortOrder.WINS -> local.teamDao().getAllTeamsWithPlayersSortByWins().toPlayer()
+                    SortOrder.LOSSES -> local.teamDao().getAllTeamsWithPlayersSortedByLosses().toPlayer()
+                    else -> local.teamDao().getAllTeamsWithPlayers().toPlayer()
                 }
             }
 

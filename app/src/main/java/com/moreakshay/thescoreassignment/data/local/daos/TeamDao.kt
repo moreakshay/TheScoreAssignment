@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
-import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
+import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayersRelation
 import com.moreakshay.thescoreassignment.utils.constants.*
 
 @Dao
@@ -16,13 +16,13 @@ interface TeamDao: BaseDao<TeamEntity> {
 
     @Transaction
     @Query("SELECT * FROM $TEAM_TABLENAME ORDER BY $NAME ASC")
-    fun getAllTeamsWithPlayers(): LiveData<List<TeamWithPlayers>>
+    fun getAllTeamsWithPlayers(): LiveData<List<TeamWithPlayersRelation>>
 
     @Transaction
     @Query("SELECT * FROM $TEAM_TABLENAME ORDER BY $WINS DESC")
-    fun getAllTeamsWithPlayersSortByWins(): LiveData<List<TeamWithPlayers>>
+    fun getAllTeamsWithPlayersSortByWins(): LiveData<List<TeamWithPlayersRelation>>
 
     @Transaction
     @Query("SELECT * FROM $TEAM_TABLENAME ORDER BY $LOSSES DESC")
-    fun getAllTeamsWithPlayersSortedByLosses(): LiveData<List<TeamWithPlayers>>
+    fun getAllTeamsWithPlayersSortedByLosses(): LiveData<List<TeamWithPlayersRelation>>
 }

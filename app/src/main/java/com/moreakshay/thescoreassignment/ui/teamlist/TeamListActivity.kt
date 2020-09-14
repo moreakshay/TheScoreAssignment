@@ -40,10 +40,15 @@ class TeamListActivity : AppCompatActivity() {
     private fun bind() {
         viewModel.teamList.observe(this) { resource ->
             adapter.submitList(resource.data ?: emptyList())
-            if (resource.data?.isNotEmpty() == true) rvTeam.smoothScrollToPosition(0)
+
+            if (resource.data?.isNotEmpty() == true) {
+                rvTeam.smoothScrollToPosition(0)
+            }
+
             binding.status = resource.status
         }
         binding.rvTeam.adapter = adapter
+
         bRefresh.setOnClickListener { viewModel.refresh() }
         bSortAlpha.setOnClickListener { viewModel.sortBy(SortOrder.NAME) }
         bSortWins.setOnClickListener { viewModel.sortBy(SortOrder.WINS) }

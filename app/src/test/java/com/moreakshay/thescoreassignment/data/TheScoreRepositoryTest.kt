@@ -1,7 +1,6 @@
 package com.moreakshay.thescoreassignment.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
 import com.google.common.truth.Truth.assertThat
@@ -11,10 +10,8 @@ import com.moreakshay.thescoreassignment.data.local.daos.PlayerDao
 import com.moreakshay.thescoreassignment.data.local.daos.TeamDao
 import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
-import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
-import com.moreakshay.thescoreassignment.data.local.entities.toDomainModel
+import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayersRelation
 import com.moreakshay.thescoreassignment.data.remote.ApiService
-import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamWithPlayers
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.TestUtils
 import com.moreakshay.thescoreassignment.utils.network.Resource
@@ -32,6 +29,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.concurrent.TimeoutException
 
+@ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
 class TheScoreRepositoryTest {
 
@@ -75,7 +73,7 @@ class TheScoreRepositoryTest {
         pauseDispatcher()
 
         // GIVEN
-        val dbData = liveData<List<TeamWithPlayers>> {
+        val dbData = liveData<List<TeamWithPlayersRelation>> {
             delay(1000)
             emit(emptyList())
         }
@@ -145,6 +143,62 @@ class TheScoreRepositoryTest {
         assertThat(apiFirstPlayer.lastName).isEqualTo(playerEntity.lastName)
         assertThat(apiFirstPlayer.firstName).isEqualTo(playerEntity.firstName)
         assertThat(apiFirstPlayer.number).isEqualTo(playerEntity.number)
+    }
+
+    @Test
+    fun getAllTeams_FromDatabase_IfDatabaseIsNotEmpty() = coroutineScopeRule.runBlockingTest {
+        pauseDispatcher()
+
+        val dataList = TestUtils.getTeamWithPlayerList()
+        // GIVEN
+        val dbData = liveData<List<TeamWithPlayersRelation>> {
+            delay(1000)
+            emit(dataList)
+        }
+
+        every { teamDao.getAllTeamsWithPlayers() } returns dbData
+
+        val apiResponse = TestUtils.getApiResponse()
+        coEvery { service.getNbaTeamList() } coAnswers {
+            delay(3000L)
+            apiResponse
+        }
+
+        // WHEN
+        val domainData = repository.getAllTeams()
+
+        val observer = Observer<Resource<List<Team>>> {}
+        domainData.observeForever(observer)
+
+        // THEN
+        advanceTimeBy(500L)
+
+        try {
+            domainData.getOrAwaitValue()
+            Assert.fail("Should have no value")
+        } catch (e: TimeoutException) {
+            // OK
+        }
+
+        advanceTimeBy(1000L)
+
+        val domainList = TestUtils.getTeamList()
+        val firstResource = domainData.getOrAwaitValue()
+        assertThat(firstResource).isEqualTo(Resource.success(domainList))
+
+        advanceUntilIdle()
+
+        resumeDispatcher()
+
+        val lastResource = domainData.getOrAwaitValue()
+
+        assertThat(lastResource).isEqualTo(Resource.success(domainList))
+
+        verify { teamDao.getAllTeamsWithPlayers() }
+
+        coVerify(exactly = 0) { service.getNbaTeamList() }
+
+        verify(exactly = 0) { db.runInTransaction(allAny()) }
     }
 
 }

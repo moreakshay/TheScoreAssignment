@@ -7,9 +7,8 @@ import com.moreakshay.thescoreassignment.core.dispatchers.DispatcherProvider
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.constants.ID
 import com.moreakshay.thescoreassignment.utils.constants.TEAM_ID
-import kotlinx.coroutines.Dispatchers
 
-data class TeamWithPlayers(
+data class TeamWithPlayersRelation(
     @Embedded val team: TeamEntity,
     @Relation(
         parentColumn = ID,
@@ -17,23 +16,23 @@ data class TeamWithPlayers(
     ) val players: List<PlayerEntity>
 )
 
-fun LiveData<List<TeamWithPlayers>>.toDomainModel(): LiveData<List<Team>> = switchMap { list ->
+fun LiveData<List<TeamWithPlayersRelation>>.toPlayer(): LiveData<List<Team>> = switchMap { list ->
     liveData(DispatcherProvider.IO) {
-        emit(list.map { it.toDomainModel() })
+        emit(list.map { it.toTeam() })
     }
 }
 
-fun TeamWithPlayers.toDomainModel(): Team {
+fun TeamWithPlayersRelation.toTeam(): Team {
     return Team(
         id = team.id,
         name = team.name,
         wins = team.wins,
         losses = team.losses,
-        players = players.map { it.toDomainModel() }
+        players = players.map { it.toPlayer() }
     )
 }
 
-fun PlayerEntity.toDomainModel(): Team.Player {
+fun PlayerEntity.toPlayer(): Team.Player {
     return Team.Player(
         id = id,
         firstName = firstName,

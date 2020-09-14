@@ -3,7 +3,7 @@ package com.moreakshay.thescoreassignment.data.remote.dtos
 
 import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
-import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
+import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayersRelation
 import com.moreakshay.thescoreassignment.utils.constants.EMPTY
 import com.moreakshay.thescoreassignment.utils.constants.NOT_AVAILABLE
 import com.moreakshay.thescoreassignment.utils.constants.NO_INT_AVAILABLE
@@ -36,20 +36,23 @@ data class NbaTeamListResponse(
     )
 }
 
-fun NbaTeamListResponse.toTeamWithPlayers(): TeamWithPlayers {
+fun NbaTeamListResponse.toTeamWithPlayers(): TeamWithPlayersRelation {
     val teamEntity = toTeamEntity()
+
     val roster = players?.map { it?.toEntity(teamEntity.id) }
-    if (roster != null && roster.isNotEmpty()) {
-        return TeamWithPlayers(team = teamEntity, players = roster.filterNotNull())
-    }
-    throw IllegalArgumentException("Players or Player values is null")
+        ?.takeIf { it.isNotEmpty() }
+        ?: throw IllegalArgumentException("Players or Player values is null")
+
+    return TeamWithPlayersRelation(team = teamEntity, players = roster.filterNotNull())
 }
 
 fun NbaTeamListResponse.toTeamEntity(): TeamEntity {
-    return TeamEntity(id = id,
+    return TeamEntity(
+        id = id,
         name = fullName,
         wins = wins ?: NO_INT_AVAILABLE,
-        losses = losses ?: NO_INT_AVAILABLE)
+        losses = losses ?: NO_INT_AVAILABLE
+    )
 }
 
 fun NbaTeamListResponse.Player.toEntity(teamId: Int): PlayerEntity {
@@ -66,7 +69,7 @@ fun NbaTeamListResponse.Player.toEntity(teamId: Int): PlayerEntity {
 fun NbaTeamListResponse.createPlayerList(): List<PlayerEntity> {
     val players = mutableListOf<PlayerEntity>()
     this.players?.forEach { player ->
-        if (player != null) {
+        if (player != null) { // this is needed because of nullable list items
             players.add(player.toEntity(this.id))
         }
     }

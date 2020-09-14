@@ -14,9 +14,9 @@ class TeamDetailsActivity : AppCompatActivity() {
         private const val TEAM_INTENT_KEY = "TEAM_INTENT_KEY"
 
         fun intentFor(context: Context, team: Team): Intent {
-            val intent = Intent(context, TeamDetailsActivity::class.java)
-            intent.putExtra(TEAM_INTENT_KEY, team)
-            return intent
+            return Intent(context, TeamDetailsActivity::class.java).apply {
+                putExtra(TEAM_INTENT_KEY, team)
+            }
         }
     }
 
