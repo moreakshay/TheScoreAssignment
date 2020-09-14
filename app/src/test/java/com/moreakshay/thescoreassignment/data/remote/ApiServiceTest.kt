@@ -2,9 +2,13 @@ package com.moreakshay.thescoreassignment.data.remote
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.moreakshay.thescoreassignment.MainCoroutineScopeRule
+import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.utils.MockResponseFileReader
 import com.moreakshay.thescoreassignment.utils.TestUtils
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.*
@@ -16,6 +20,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @Suppress("SameParameterValue")
 @RunWith(JUnit4::class)
 class ApiServiceTest {
+
+    @ExperimentalCoroutinesApi
+    @Rule
+    @JvmField
+    val coroutineScopeRule = MainCoroutineScopeRule()
 
     @Rule
     @JvmField
@@ -76,7 +85,16 @@ class ApiServiceTest {
         assertThat(player.number).isEqualTo(comparePlayer.number)
     }
 
-    //TODO: failure state
+    @Test
+    fun getNbaTeamList_emptyApiResponse_returnFalse(){
+        server.enqueue(MockResponse().setResponseCode(200).setBody("[]"))
+        val teams: List<NbaTeamListResponse>? = runBlocking {
+            service.getNbaTeamList()
+        }
+        val request = server.takeRequest()
+        assertThat(request.path).isEqualTo("/nba-team-viewer/master/input.json")
+        assertThat(teams).isEmpty()
+    }
 
     private val firstTeam get() = TestUtils.getApiResponse()[0]
 }

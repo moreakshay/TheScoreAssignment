@@ -72,7 +72,7 @@ class TheScoreRepositoryTest {
     fun testTeamsFromNetworkAreSavedToDatabaseIfDatabaseIsEmpty() = coroutineScopeRule.runBlockingTest {
         pauseDispatcher()
 
-        // giv
+        // GIVEN
         val dbData = liveData<List<TeamWithPlayers>> {
             delay(1000)
             emit(emptyList())
@@ -86,13 +86,13 @@ class TheScoreRepositoryTest {
             apiResponse
         }
 
-        // when
+        // WHEN
         val domainData = repository.getAllTeams()
 
         val observer = Observer<Resource<List<Team>>> {}
         domainData.observeForever(observer)
 
-        // then
+        // THEN
         advanceTimeBy(500L)
 
         try {
