@@ -52,6 +52,7 @@
             android:background="@drawable/card_background"
             android:gravity="center"
             android:text="@{String.format(@string/wins, team.wins)}"
+            android:textAllCaps="true"
             app:layout_constraintLeft_toLeftOf="@id/ivBack"
             app:layout_constraintTop_toBottomOf="@+id/tvName"
             app:layout_constraintRight_toLeftOf="@+id/tvLosses"
@@ -69,6 +70,7 @@
             android:background="@drawable/card_background"
             android:gravity="center"
             android:text="@{String.format(@string/losses, team.losses)}"
+            android:textAllCaps="true"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/tvWins"
             app:layout_constraintTop_toBottomOf="@+id/tvName" />
@@ -79,9 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16dp"
-            android:layout_marginLeft="@dimen/_8dp"
             android:text="@string/roster"
-            app:layout_constraintLeft_toLeftOf="@id/ivBack"
+            app:layout_constraintLeft_toLeftOf="@id/tvWins"
             app:layout_constraintTop_toBottomOf="@id/tvWins" />
 
         <androidx.recyclerview.widget.RecyclerView

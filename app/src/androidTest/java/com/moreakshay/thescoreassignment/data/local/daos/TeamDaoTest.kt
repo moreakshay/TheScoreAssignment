@@ -39,7 +39,7 @@ class TeamDaoTest : DbTest() {
     }
 
     @Test
-    fun getAllTeamsWithPlayers_sortyAlphabetically_returnTrue() {
+    fun getAllTeamsWithPlayers_sortAlphabetically_returnTrue() {
         //GIVEN insert values
         val loadedData: List<NbaTeamListResponse> =
             runBlocking {
@@ -64,5 +64,61 @@ class TeamDaoTest : DbTest() {
 
         //THEN
         assertThat(teams.map { it.team.name }).containsExactlyElementsOf(list.map { it.team.name })
+    }
+
+    @Test
+    fun getAllTeamsWithPlayers_sortByWins_returnTrue() {
+        //GIVEN insert values
+        val loadedData: List<NbaTeamListResponse> =
+            runBlocking {
+                val type =
+                    Types.newParameterizedType(List::class.java, NbaTeamListResponse::class.java)
+
+                Moshi.Builder().build()
+                    .adapter<List<NbaTeamListResponse>>(type).fromJson(
+                        MockResponseFileReader("TeamResponse.json").content
+                    ) ?: emptyList()
+            }
+        loadedData.forEach { teamListResponse ->
+            db.teamDao().insert(teamListResponse.toTeamEntity())
+            db.playerDao().insertAll(teamListResponse.createPlayerList())
+        }
+
+        val list = loadedData.map { it.toTeamWithPlayers() }
+            .sortedByDescending { it.team.wins }
+
+        //WHEN values sorted alphabetically
+        val teams: List<TeamWithPlayers> = db.teamDao().getAllTeamsWithPlayersSortByWins().getOrAwaitValue()
+
+        //THEN
+        assertThat(teams.map { it.team.id }).containsExactlyElementsOf(list.map { it.team.id })
+    }
+
+    @Test
+    fun getAllTeamsWithPlayers_sortByLosses_returnTrue() {
+        //GIVEN insert values
+        val loadedData: List<NbaTeamListResponse> =
+            runBlocking {
+                val type =
+                    Types.newParameterizedType(List::class.java, NbaTeamListResponse::class.java)
+
+                Moshi.Builder().build()
+                    .adapter<List<NbaTeamListResponse>>(type).fromJson(
+                        MockResponseFileReader("TeamResponse.json").content
+                    ) ?: emptyList()
+            }
+        loadedData.forEach { teamListResponse ->
+            db.teamDao().insert(teamListResponse.toTeamEntity())
+            db.playerDao().insertAll(teamListResponse.createPlayerList())
+        }
+
+        val list = loadedData.map { it.toTeamWithPlayers() }
+            .sortedByDescending { it.team.losses }
+
+        //WHEN values sorted alphabetically
+        val teams: List<TeamWithPlayers> = db.teamDao().getAllTeamsWithPlayersSortedByLosses().getOrAwaitValue()
+
+        //THEN
+        assertThat(teams.map { it.team.id }).containsExactlyElementsOf(list.map { it.team.id })
     }
 }

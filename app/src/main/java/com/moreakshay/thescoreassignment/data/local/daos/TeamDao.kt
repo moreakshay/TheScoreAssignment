@@ -24,5 +24,5 @@ interface TeamDao: BaseDao<TeamEntity> {
 
     @Transaction
     @Query("SELECT * FROM $TEAM_TABLENAME ORDER BY $LOSSES DESC")
-    fun getAllTeamsWithPlayersSortyByLosses(): LiveData<List<TeamWithPlayers>>
+    fun getAllTeamsWithPlayersSortedByLosses(): LiveData<List<TeamWithPlayers>>
 }

@@ -12,7 +12,9 @@ import com.moreakshay.thescoreassignment.data.local.daos.TeamDao
 import com.moreakshay.thescoreassignment.data.local.entities.PlayerEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
+import com.moreakshay.thescoreassignment.data.local.entities.toDomainModel
 import com.moreakshay.thescoreassignment.data.remote.ApiService
+import com.moreakshay.thescoreassignment.data.remote.dtos.toTeamWithPlayers
 import com.moreakshay.thescoreassignment.ui.teamlist.domainmodels.Team
 import com.moreakshay.thescoreassignment.utils.TestUtils
 import com.moreakshay.thescoreassignment.utils.network.Resource
@@ -69,7 +71,7 @@ class TheScoreRepositoryTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testTeamsFromNetworkAreSavedToDatabaseIfDatabaseIsEmpty() = coroutineScopeRule.runBlockingTest {
+    fun getAllTeams_FromNetworkAreSavedToDatabase_IfDatabaseIsEmpty() = coroutineScopeRule.runBlockingTest {
         pauseDispatcher()
 
         // GIVEN
@@ -144,4 +146,5 @@ class TheScoreRepositoryTest {
         assertThat(apiFirstPlayer.firstName).isEqualTo(playerEntity.firstName)
         assertThat(apiFirstPlayer.number).isEqualTo(playerEntity.number)
     }
+
 }

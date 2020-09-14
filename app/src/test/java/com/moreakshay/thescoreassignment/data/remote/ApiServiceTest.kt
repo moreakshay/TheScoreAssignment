@@ -96,5 +96,6 @@ class ApiServiceTest {
         assertThat(teams).isEmpty()
     }
 
+
     private val firstTeam get() = TestUtils.getApiResponse()[0]
 }
