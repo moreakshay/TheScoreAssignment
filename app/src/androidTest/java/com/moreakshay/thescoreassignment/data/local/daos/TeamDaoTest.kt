@@ -3,6 +3,7 @@ package com.moreakshay.thescoreassignment.data.local.daos
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.moreakshay.thescoreassignment.data.local.DbTest
+import com.moreakshay.thescoreassignment.data.local.entities.TeamEntity
 import com.moreakshay.thescoreassignment.data.local.entities.TeamWithPlayers
 import com.moreakshay.thescoreassignment.data.remote.dtos.NbaTeamListResponse
 import com.moreakshay.thescoreassignment.data.remote.dtos.createPlayerList
@@ -28,7 +29,7 @@ class TeamDaoTest : DbTest() {
 
     @Test
     fun insertTeamDao_read_returnTrue() {
-        val teamEntity = TestUtils.createTeam(1, "Boston Celtics", 45, 20)
+        val teamEntity = TeamEntity(1, "Boston Celtics", 45, 20)
         db.teamDao().insert(teamEntity)
         val loaded = db.teamDao().getTeamById(1).getOrAwaitValue()
         assertThat(loaded).isNotNull()

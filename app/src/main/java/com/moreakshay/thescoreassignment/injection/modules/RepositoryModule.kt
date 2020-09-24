@@ -36,7 +36,7 @@ class RepositoryModule {
 
     @ApplicationScope
     @Provides
-    fun proviesHttpClient(interceptor: Interceptor): OkHttpClient {
+    fun provideHttpClient(interceptor: Interceptor): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build()
@@ -44,7 +44,7 @@ class RepositoryModule {
 
     @ApplicationScope
     @Provides
-    fun proviedHeaderInterceptor(): Interceptor {
+    fun provideHeaderInterceptor(): Interceptor {
         return Interceptor { chain ->
             val url = chain.request()
                     .url()

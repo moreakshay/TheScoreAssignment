@@ -15,7 +15,7 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(TeamListViewModel::class)
-    abstract fun bindMoviesViewModel(moviesViewModel: TeamListViewModel): ViewModel
+    abstract fun bindTeamListViewModel(teamListViewModel: TeamListViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(viewModelFactory: ViewModelFactory): ViewModelProvider.Factory

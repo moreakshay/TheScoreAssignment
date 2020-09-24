@@ -38,7 +38,6 @@ class TheScoreRepository @Inject constructor(
                     SortOrder.NAME -> local.teamDao().getAllTeamsWithPlayers().toDomainModel()
                     SortOrder.WINS -> local.teamDao().getAllTeamsWithPlayersSortByWins().toDomainModel()
                     SortOrder.LOSSES -> local.teamDao().getAllTeamsWithPlayersSortedByLosses().toDomainModel()
-                    else -> local.teamDao().getAllTeamsWithPlayers().toDomainModel()
                 }
             }
 

@@ -102,7 +102,6 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$versions.junit"
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
     testImplementation "com.squareup.okhttp3:mockwebserver:$versions.mockWebServer"
     testImplementation "org.hamcrest:hamcrest:$versions.hamcrest"
     testImplementation "androidx.arch.core:core-testing:$versions.androidXArchTest"
@@ -116,22 +115,19 @@ dependencies {
 
     //Dependencies for Android unit tests
     androidTestImplementation "junit:junit:$versions.junit"
-    androidTestImplementation "org.mockito:mockito-core:$versions.mockito"
-    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$versions.dexMaker"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
     //noinspection GradleDependency
-    androidTestImplementation "org.assertj:assertj-core:2.9.1"
-    testImplementation "io.mockk:mockk:1.10.0"
+    androidTestImplementation "org.assertj:assertj-core:$versions.assertJ"
+    testImplementation "io.mockk:mockk:$versions.mockK"
 
-
-    // AndroidX Test - JVM testing
+    //AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:$versions.androidXTestCore"
     testImplementation "androidx.test.ext:junit-ktx:$versions.androidXTestExtKtx"
     testImplementation "androidx.test:rules:$versions.androidXTestRule"
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
     implementation "androidx.test:core:$versions.androidXTestCore"
 
-    // AndroidX Test - Instrumented testing
+    //AndroidX Test - Instrumented testing
     androidTestImplementation "androidx.test:core-ktx:$versions.androidXTestCore"
     androidTestImplementation "androidx.test.ext:junit-ktx:$versions.androidXTestExtKtx"
     androidTestImplementation "androidx.test:rules:$versions.androidXTestRule"
@@ -144,12 +140,11 @@ dependencies {
     androidTestImplementation "org.robolectric:annotations:$versions.robolectric"
     implementation "androidx.test.espresso:espresso-idling-resource:$versions.espresso"
 
-    // Resolve conflicts between main and test APK:
+    //Resolve conflicts between main and test APK:
     androidTestImplementation "androidx.annotation:annotation:$versions.androidXAnnotations"
     androidTestImplementation "androidx.legacy:legacy-support-v4:$versions.androidXLegacy"
     androidTestImplementation "androidx.recyclerview:recyclerview:$versions.recyclerView"
     androidTestImplementation "androidx.appcompat:appcompat:$versions.appCompat"
     androidTestImplementation "com.google.android.material:material:$versions.material"
-
 
 }

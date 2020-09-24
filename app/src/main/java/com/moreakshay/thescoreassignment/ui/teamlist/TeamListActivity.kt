@@ -40,7 +40,9 @@ class TeamListActivity : AppCompatActivity() {
     private fun bind() {
         viewModel.teamList.observe(this) { resource ->
             adapter.submitList(resource.data ?: emptyList())
+
             if (resource.data?.isNotEmpty() == true) rvTeam.smoothScrollToPosition(0)
+
             binding.status = resource.status
         }
         binding.rvTeam.adapter = adapter

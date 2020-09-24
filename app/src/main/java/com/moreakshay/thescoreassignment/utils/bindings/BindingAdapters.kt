@@ -11,9 +11,8 @@ import java.util.stream.Stream
 
 @BindingAdapter("firstName", "lastName")
 fun displayName(textView: TextView, firstName: String, lastName: String) {
-    var name = firstName
-    name = when {
-        firstName.isNotEmpty() -> "$name $lastName"
+    val name = when {
+        firstName.isNotEmpty() -> "$firstName $lastName"
         firstName.isEmpty() -> lastName
         else -> NOT_AVAILABLE
     }

@@ -2,8 +2,10 @@ package com.moreakshay.thescoreassignment.utils.network
 
 import androidx.lifecycle.*
 import com.moreakshay.thescoreassignment.core.dispatchers.DispatcherProvider
-import kotlinx.coroutines.Dispatchers
+import com.moreakshay.thescoreassignment.utils.extensions.await
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
     private val responseHandler = ResponseHandler()
 
@@ -13,8 +15,10 @@ abstract class NetworkBoundResource<ResultType : Any, RequestType : Any> {
 
             val disposableHandle = emitSource(initialData.map { responseHandler.handleLoading(it) })
 
+            val firstValue = initialData.await()
+
             try {
-                if (shouldFetch(initialData.value)) {
+                if (shouldFetch(firstValue)) {
                     val apiResponse = createCall()
                     saveCallResult(apiResponse)
                 }

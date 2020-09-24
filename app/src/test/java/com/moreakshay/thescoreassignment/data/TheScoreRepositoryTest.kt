@@ -64,6 +64,7 @@ class TheScoreRepositoryTest {
         every { db.teamDao() } returns teamDao
         every { db.playerDao() } returns playerDao
         every { db.runInTransaction(allAny()) } answers { callOriginal() }
+
         repository = TheScoreRepository(db, service)
 
         MockKAnnotations.init(this, relaxUnitFun = true)
